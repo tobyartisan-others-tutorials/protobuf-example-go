@@ -2,8 +2,9 @@ syntax = "proto3";
 
 package example.simple;
 
+//option go_package = "simplepb";
 //option go_package = "example.com/project/protos/fizz";
-option go_package = "simple/simplepb";
+option go_package = "example.simple";
 
 message SimpleMessage {
   int32 id = 1;
