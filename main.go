@@ -13,7 +13,7 @@ import (
 func main() {
 	sm := doSimple()
 
-	//readAndWriteDemo(sm)
+	readAndWriteDemo(sm)
 	jsonDemo(sm)
 }
 
