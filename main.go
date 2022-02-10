@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"protobuf-to-go/src/complex/complexpb"
 	"protobuf-to-go/src/enum_example/enumpb"
 	"protobuf-to-go/src/simple/simplepb"
 
@@ -18,11 +19,34 @@ func main() {
 	jsonDemo(sm)
 
 	doEnum()
+
+	doComplex()
+}
+
+func doComplex() {
+	cm := complexpb.ComplexMessage{
+		OneDummy: &complexpb.DummyMessage{
+			Id: 1,
+			Name: "First message",
+		},
+		MultipleDummy: []*complexpb.DummyMessage{
+			&complexpb.DummyMessage{
+				Id: 2,
+				Name: "Second message",
+			},
+			&complexpb.DummyMessage{
+				Id: 3,
+				Name: "Third message",
+			},
+		},
+	}
+
+	fmt.Println(cm)
 }
 
 func doEnum() {
 	em := enumpb.EnumMessage{
-		Id: 42,
+		Id:           42,
 		DayOfTheWeek: enumpb.DayOfTheWeek_THURSDAY,
 	}
 
@@ -49,7 +73,7 @@ func toJson(pb proto.Message) string {
 
 	out, err := marshaler.Marshal(pb)
 
-	if(err != nil) {
+	if err != nil {
 		log.Fatalln("Can't convert to JSON", err)
 		return ""
 	}
@@ -61,7 +85,7 @@ func fromJson(in string, pb proto.Message) error {
 	str := []byte(in)
 	err := protojson.Unmarshal(str, pb)
 
-	if(err != nil) {
+	if err != nil {
 		log.Fatalln("Can't convert to JSON", err)
 		return err
 	}
