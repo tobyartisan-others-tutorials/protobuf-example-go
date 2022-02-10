@@ -6,13 +6,53 @@ import (
 	"log"
 	"protobuf-to-go/src/simple/simplepb"
 
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
 
 func main() {
 	sm := doSimple()
-	
-	readAndWriteDemo(sm)
+
+	//readAndWriteDemo(sm)
+	jsonDemo(sm)
+}
+
+func jsonDemo(sm proto.Message) {
+	smAsString := toJson(sm)
+	fmt.Println(smAsString)
+
+	sm2 := &simplepb.SimpleMessage{}
+	fromJson(smAsString, sm2)
+	fmt.Println("Successfully created proto structs:", sm2)
+}
+
+func toJson(pb proto.Message) string {
+	marshaler := protojson.MarshalOptions{
+		//Indent:          " ",
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
+	}
+
+	out, err := marshaler.Marshal(pb)
+
+	if(err != nil) {
+		log.Fatalln("Can't convert to JSON", err)
+		return ""
+	}
+
+	return string(out)
+}
+
+func fromJson(in string, pb proto.Message) error {
+	str := []byte(in)
+	err := protojson.Unmarshal(str, pb)
+
+	if(err != nil) {
+		log.Fatalln("Can't convert to JSON", err)
+		return err
+	}
+
+	return nil
 }
 
 func readAndWriteDemo(sm proto.Message) {
@@ -24,13 +64,13 @@ func readAndWriteDemo(sm proto.Message) {
 
 func readFromFile(fname string, pb proto.Message) error {
 	in, err := ioutil.ReadFile(fname)
-	if(err != nil) {
+	if err != nil {
 		log.Fatalln("Something went wrong when reading the file", err)
 		return err
 	}
 
 	err = proto.Unmarshal(in, pb)
-	if(err != nil) {
+	if err != nil {
 		log.Fatalln("Couldn't put the bytes into the protocol buffer's struct", err)
 		return err
 	}
