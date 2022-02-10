@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package gen.simple;
 
-//option go_package = "simplepb";
-//option go_package = "example.com/project/protos/fizz";
 option go_package = "gen/simple";
 
 message SimpleMessage {
