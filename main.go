@@ -7,6 +7,7 @@ import (
 	"protobuf-to-go/src/complex/complexpb"
 	"protobuf-to-go/src/enum_example/enumpb"
 	"protobuf-to-go/src/simple/simplepb"
+	"protobuf-to-go/src/github.com/protocolbuffers/protobuf/examples/go/tutorialpb"
 
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
@@ -21,6 +22,21 @@ func main() {
 	doEnum()
 
 	doComplex()
+
+	readAndWriteAddressBook()
+}
+
+func readAndWriteAddressBook() {
+	ab := tutorialpb.AddressBook{}
+
+	p := &tutorialpb.Person{
+		Name: "Goku",
+	}
+
+	ab.People = append(ab.People, p)
+
+	people := ab.GetPeople()
+	fmt.Println(people)
 }
 
 func doComplex() {
